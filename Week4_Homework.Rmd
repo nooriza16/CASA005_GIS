@@ -17,7 +17,6 @@ libraries("countrycode", "dplyr", "tidyverse", "sf","tmap")
 ```
 
 
-
 #### 2. Load the CSV data: World GII Composite Data
 ```{r}
 
@@ -27,7 +26,6 @@ composit <- read.csv("HDR23-24_Composite_indices_complete_time_series.csv",
                      encoding = "latin1",
                      check.names = FALSE)
 ```
-
 
 
 #### 3. Dealing with CSV data
@@ -71,7 +69,6 @@ world_json <- st_read("World_Countries_(Generalized)_9029012925078512962.geojson
 ```
 
 
-
 #### 5. Dealing with JSON data: World Countries
 ```{r}
 
@@ -81,7 +78,6 @@ world_json <- st_read("World_Countries_(Generalized)_9029012925078512962.geojson
 world_json2 <- world_json %>%
 mutate(iso3_code = countrycode(COUNTRY, "country.name", "iso3c"))
 ```
-
 
 
 #### 6. Join JSON and CSV
@@ -99,7 +95,6 @@ world_gii_joined <- world_json2 %>%
 
 world_gii_joined2 <- world_gii_joined[,-c(2:6)]
 ```
-
 
 
 #### 7. Viz : Creating a map
