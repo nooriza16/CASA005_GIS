@@ -73,8 +73,8 @@ world_gii_joined <- world_json2 %>%
         world_gii,
         by.x = 'iso3_code',
         by.y = 'iso3',
-        no.dups = TRUE) %>%
-  distinct()
+        no.dups = TRUE) %>% 
+  distinct() 
 
 
 ###Delete unnecessary columns after join
@@ -97,3 +97,46 @@ tm_layout(main.title = "World Gender Inequality Index (2019-2010)",
           legend.title.size = 0.5,
           legend.position = c("left", "bottom"))
 ```
+
+
+
+#### 8. Viz : Creating interactive map
+```{r}
+library(leafpop)
+library(leaflet)
+
+popupgii <- world_gii_joined2 %>%
+  st_drop_geometry()%>%
+  dplyr::select(difference, COUNTRY)%>%
+  popupTable()
+
+tmap_mode("view")
+
+breaks = c(-0.1, -0.05, 0, 0.05, 0.1, 0.15, 0.5)
+
+pal_gii<-world_gii_joined2%>%
+  colorBin(palette = "PuBu", domain=.$difference, bins = breaks)
+
+map <- leaflet(world_gii_joined2) %>%
+  addPolygons(color="white",
+              weight = 2,
+              opacity = 1,
+              popup = popupgii,
+              fillOpacity = 0.7,
+              fillColor = ~pal_gii(difference),
+              group = "GII")%>%
+  addTiles(group = "OSM (default)") %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "CartoDB")%>%
+  addLegend(pal = pal_gii, values = ~difference, position ="bottomleft", title = "Gender inequality index") %>%
+  addLayersControl(
+    baseGroups = c("OSM (default)", "CartoDB"),
+    overlayGroups = c("GII"),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+map
+ 
+
+```
+
+
+
