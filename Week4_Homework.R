@@ -6,11 +6,9 @@ install.packages("countrycode")
 library(easypackages)
 libraries("countrycode", "dplyr", "tidyverse", "sf","tmap")
 
-composit <- read.csv("HDR23-24_Composite_indices_complete_time_series.csv",
-                     header = TRUE,
-                     sep = ",",
-                     encoding = "latin1",
-                     check.names = FALSE)
+composit <- read_csv("https://hdr.undp.org/sites/default/files/2023-24_HDR/HDR23-24_Composite_indices_complete_time_series.csv",
+                     locale = locale(encoding = "latin1"),
+                     na = "n/a")
 
 names(composit)
 
